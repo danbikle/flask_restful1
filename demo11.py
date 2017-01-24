@@ -10,10 +10,11 @@
 # ~/anaconda3/bin/python demo11.py
 # curl localhost:5000/demo11
 
-# 
+import os
+import flask
 from flask_restful import Resource, Api
 
-application = Flask(__name__)
+application = flask.Flask(__name__)
 api         = Api(application)
 
 class Demo11(Resource):
