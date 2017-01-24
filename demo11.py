@@ -12,12 +12,12 @@
 
 import os
 import flask
-from flask_restful import Resource, Api
+import flask_restful as fr
 
 application = flask.Flask(__name__)
-api         = Api(application)
+api         = fr.Api(application)
 
-class Demo11(Resource):
+class Demo11(fr.Resource):
   def get(self):
     my_k_s = 'hello'
     my_v_s = 'world'
