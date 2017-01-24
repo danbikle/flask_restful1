@@ -9,7 +9,8 @@
 # Demo:
 # export FLASK_DEBUG=1
 # ~/anaconda3/bin/python demo12.py
-# curl localhost:5000/demo12/IBM/2017/30
+# curl localhost:5000/demo12a/IBM/2017/30
+# curl localhost:5000/demo12b/IBM/2017/30
 # The above URL has path-tokens: IBM/2017/30
 import os
 import flask
