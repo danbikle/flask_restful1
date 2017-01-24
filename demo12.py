@@ -4,6 +4,7 @@
 # flask_restful.Resource
 # flask_restful.Api
 # api.add_resource()
+# URL-path parameters
 
 # Demo:
 # export FLASK_DEBUG=1
