@@ -1,6 +1,6 @@
 # demo11.py
 
-# This script should demostrate:
+# This script should demonstrate:
 # flask_restful.Resource
 # flask_restful.Api
 # api.add_resource()
