@@ -23,7 +23,6 @@ class Demo11(fr.Resource):
     my_v_s = 'world'
     return {my_k_s: my_v_s}
 api.add_resource(Demo11, '/demo11')
-# curl localhost:5000/demo11
 
 if __name__ == "__main__":
   port = int(os.environ.get("PORT", 5000))
