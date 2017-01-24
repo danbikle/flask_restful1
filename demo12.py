@@ -28,6 +28,16 @@ class Demo12(fr.Resource):
 # I should declare URL-path parameters:
 api.add_resource(Demo12, '/demo12/<tkr>/<yr2predict>/<yrs2train>')
 
+class Demo13(fr.Resource):
+  # I should tell get() about URL-path parameters:
+  def get(self, tkr='AAPL', yr2predict=2016, yrs2train=25):
+    k1_s = '1. You want to predict'
+    k2_s = '2. For this year'
+    k3_s = '3. By learning from this many years'
+    return {k1_s:tkr, k2_s:yr2predict, k3_s:yrs2train}
+# I should declare URL-path parameters, and I should constrain them:
+api.add_resource(Demo13, '/demo13/<tkr>/<int:yr2predict>/<int:yrs2train>')
+
 if __name__ == "__main__":
   port = int(os.environ.get("PORT", 5000))
   application.run(host='0.0.0.0', port=port)
