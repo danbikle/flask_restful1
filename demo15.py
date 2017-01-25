@@ -10,7 +10,7 @@
 # Demo:
 # export FLASK_DEBUG=1
 # ~/anaconda3/bin/python demo15.py
-# curl localhost:5000/demo15/IBM/2016/9/
+# curl localhost:5000/demo15/IBM/2016/9
 import pdb
 import os
 import flask         as fl
@@ -31,10 +31,14 @@ class Demo15(fr.Resource):
     k3_s   = '3. By learning from this many years'
     k4_s   = '4. With '
     algo_s = 'Linear Regression'
-    return {'under': 'construction'}
+    return {k1_s:tkr
+            ,k2_s:yr2predict
+            ,k3_s:yrs2train
+            ,k4_s:algo_s
+    }
 # I should declare URL-path-tokens, and I should constrain them:
 api.add_resource(Demo15, '/demo15/<tkr>/<yr2predict>/<int:yrs2train>')
-# curl localhost:5000/demo15/SPY/2017/1/
+# curl localhost:5000/demo15/SPY/2017/1
 
 if __name__ == "__main__":
   port = int(os.environ.get("PORT", 5000))
