@@ -18,11 +18,7 @@ import flask_restful as fr
 import pandas        as pd
 import numpy         as np
 import datetime      as dt
-import sklearn       as sk
-
-#from datetime import datetime
-#from sklearn  import linear_model
-
+import sklearn.linear_model as skl
 
 application = fl.Flask(__name__)
 api         = fr.Api(application)
@@ -35,17 +31,14 @@ class Demo14(fr.Resource):
     k3_s = '3. By learning from this many years'
     k4_s = '4. With '
     algo_s = 'Linear Regression'
+    k5_s = '5. And the prediction is '
     # I should get prices for tkr:
     prices0_df = pd.read_csv('http://ichart.finance.yahoo.com/table.csv?s='+tkr)
     prices1_df = prices0_df[['Date','Close']].sort_values(['Date'])
     # I should get training data.
-    # I should get max-date.
-    pdb.set_trace()
     max_date_s  = prices1_df['Date'].max()
     max_date_dt = dt.datetime.strptime(max_date_s, '%Y-%m-%d')
     # I should get min-date in the training data.
-    # google: in python how to subtract days from a datetime?
-    # - timedelta(days=days_to_subtract)
     min_date_dt = max_date_dt - dt.timedelta(days=(yrs2train * 365))
     min_date_s  = dt.datetime.strftime(min_date_dt, '%Y-%m-%d')
     # I should get training data.
@@ -56,9 +49,18 @@ class Demo14(fr.Resource):
     days_delt_sr = train0_df.cdate - min_date_dt
     days_i_sr    = (days_delt_sr / np.timedelta64(1, 'D')).astype(int)
     train0_df['days'] = days_i_sr
-    print(train0_df.head())
-    print(train0_df.tail())
-    return {k1_s:tkr, k2_s:date2predict, k3_s:yrs2train, k4_s:algo_s}
+    pdb.set_trace()
+    # I should fit a linear model:
+    linr_model = skl.LinearRegression()
+    x_wrongshape_a = np.array(train0_df.days)
+    x_a = np.reshape(x_wrongshape_a, (len(x_wrongshape_a),1))
+    y_a = np.array(train0_df.Close)
+    linr_model.fit(x_a,y_a)
+    # I should convert date2predict to integer of days past min_date_dt
+    date2predict_dt = dt.datetime.strptime(date2predict, '%Y-%m-%d')
+    date2predict_i = (date2predict_dt - min_date_dt).days
+    prediction_f = linr_model.predict(date2predict_i)[0]
+    return {k1_s:tkr, k2_s:date2predict, k3_s:yrs2train, k4_s:algo_s, k5_s:prediction_f}
 # I should declare URL-path-tokens, and I should constrain them:
 api.add_resource(Demo14, '/demo14/<tkr>/<int:yrs2train>/<date2predict>')
 # curl localhost:5000/demo14/IBM/9/2017-12-31
