@@ -5,7 +5,7 @@
 # flask_restful.Api
 # api.add_resource()
 # URL-path-tokens
-# sklearn
+# sklearn LinearRegression
 
 # Demo:
 # export FLASK_DEBUG=1
