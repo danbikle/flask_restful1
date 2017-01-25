@@ -32,8 +32,11 @@ class Demo14(fr.Resource):
     k4_s   = '4. With '
     algo_s = 'Linear Regression'
     k5_s   = '5. And the prediction is '
+    k6_s   = '6. Most recent price is '
     # I should get prices for tkr:
     prices0_df = pd.read_csv('http://ichart.finance.yahoo.com/table.csv?s='+tkr)
+    # I should get most recent price:
+    recent_price_f = prices0_df.Close[0]
     prices1_df = prices0_df[['Date','Close']].sort_values(['Date'])
     # I should get training data.
     max_date_s  = prices1_df['Date'].max()
@@ -59,7 +62,13 @@ class Demo14(fr.Resource):
     date2predict_dt = dt.datetime.strptime(date2predict, '%Y-%m-%d')
     date2predict_i  = (date2predict_dt - min_date_dt).days
     prediction_f    = linr_model.predict(date2predict_i)[0]
-    return {k1_s:tkr, k2_s:date2predict, k3_s:yrs2train, k4_s:algo_s, k5_s:prediction_f}
+    return {k1_s:tkr
+            ,k2_s:date2predict
+            ,k3_s:yrs2train
+            ,k4_s:algo_s
+            ,k5_s:prediction_f
+            ,k6_s:recent_price_f
+    }
 # I should declare URL-path-tokens, and I should constrain them:
 api.add_resource(Demo14, '/demo14/<tkr>/<int:yrs2train>/<date2predict>')
 # curl localhost:5000/demo14/IBM/9/2017-12-31
