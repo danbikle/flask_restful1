@@ -31,6 +31,7 @@ class Demo13(fr.Resource):
     return {k1_s:tkr, k2_s:yr2predict, k3_s:yrs2train, k4_s:features}
 # I should declare URL-path-tokens, and I should constrain them:
 api.add_resource(Demo13, '/demo13/<tkr>/<int:yr2predict>/<int:yrs2train>')
+# curl localhost:5000/demo13/IBM/2017/30?features=pctlag1,slope2,dow,moy
 
 if __name__ == "__main__":
   port = int(os.environ.get("PORT", 5000))
