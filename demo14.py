@@ -26,12 +26,12 @@ api         = fr.Api(application)
 class Demo14(fr.Resource):
   # I should tell get() about URL-path-tokens:
   def get(self, tkr='AAPL', yrs2train=8, date2predict='2018-01-01'):
-    k1_s = '1. You want to predict'
-    k2_s = '2. For this date'
-    k3_s = '3. By learning from this many years'
-    k4_s = '4. With '
+    k1_s   = '1. You want to predict'
+    k2_s   = '2. For this date'
+    k3_s   = '3. By learning from this many years'
+    k4_s   = '4. With '
     algo_s = 'Linear Regression'
-    k5_s = '5. And the prediction is '
+    k5_s   = '5. And the prediction is '
     # I should get prices for tkr:
     prices0_df = pd.read_csv('http://ichart.finance.yahoo.com/table.csv?s='+tkr)
     prices1_df = prices0_df[['Date','Close']].sort_values(['Date'])
@@ -42,24 +42,23 @@ class Demo14(fr.Resource):
     min_date_dt = max_date_dt - dt.timedelta(days=(yrs2train * 365))
     min_date_s  = dt.datetime.strftime(min_date_dt, '%Y-%m-%d')
     # I should get training data.
-    train0_df = prices1_df.copy()[prices1_df.Date >= min_date_s]
+    train_df = prices1_df.copy()[prices1_df.Date >= min_date_s]
     # I should convert Date from string to datetime:
-    train0_df['cdate'] = pd.to_datetime(train0_df.Date)
+    train_df['cdate'] = pd.to_datetime(train_df.Date)
     # I should convert cdate to integer
-    days_delt_sr = train0_df.cdate - min_date_dt
+    days_delt_sr = train_df.cdate - min_date_dt
     days_i_sr    = (days_delt_sr / np.timedelta64(1, 'D')).astype(int)
-    train0_df['days'] = days_i_sr
-    pdb.set_trace()
+    train_df['days'] = days_i_sr
     # I should fit a linear model:
-    linr_model = skl.LinearRegression()
-    x_wrongshape_a = np.array(train0_df.days)
+    linr_model     = skl.LinearRegression()
+    x_wrongshape_a = np.array(train_df.days)
     x_a = np.reshape(x_wrongshape_a, (len(x_wrongshape_a),1))
-    y_a = np.array(train0_df.Close)
+    y_a = np.array(train_df.Close)
     linr_model.fit(x_a,y_a)
     # I should convert date2predict to integer of days past min_date_dt
     date2predict_dt = dt.datetime.strptime(date2predict, '%Y-%m-%d')
-    date2predict_i = (date2predict_dt - min_date_dt).days
-    prediction_f = linr_model.predict(date2predict_i)[0]
+    date2predict_i  = (date2predict_dt - min_date_dt).days
+    prediction_f    = linr_model.predict(date2predict_i)[0]
     return {k1_s:tkr, k2_s:date2predict, k3_s:yrs2train, k4_s:algo_s, k5_s:prediction_f}
 # I should declare URL-path-tokens, and I should constrain them:
 api.add_resource(Demo14, '/demo14/<tkr>/<int:yrs2train>/<date2predict>')
