@@ -37,6 +37,8 @@ class Demo14(fr.Resource):
     prices0_df = pd.read_csv('http://ichart.finance.yahoo.com/table.csv?s='+tkr)
     # I should get most recent price:
     recent_price_f = prices0_df.Close[0]
+
+    # See diagram: py4.us/cclasses/class04#r1
     prices1_df = prices0_df[['Date','Close']].sort_values(['Date'])
     # I should get training data.
     max_date_s  = prices1_df['Date'].max()
@@ -45,22 +47,32 @@ class Demo14(fr.Resource):
     min_date_dt = max_date_dt - dt.timedelta(days=(yrs2train * 365))
     min_date_s  = dt.datetime.strftime(min_date_dt, '%Y-%m-%d')
     # I should get training data.
-    train_df = prices1_df.copy()[prices1_df.Date >= min_date_s]
+
+    # See diagram: py4.us/cclasses/class04#r1
+    prices2_df = prices1_df.copy()[prices1_df.Date >= min_date_s]
     # I should convert Date from string to datetime:
-    train_df['cdate'] = pd.to_datetime(train_df.Date)
+    prices2_df['cdate'] = pd.to_datetime(prices2_df.Date)
     # I should convert cdate to integer
-    days_delt_sr = train_df.cdate - min_date_dt
+    days_delt_sr = prices2_df.cdate - min_date_dt
     days_i_sr    = (days_delt_sr / np.timedelta64(1, 'D')).astype(int)
-    train_df['days'] = days_i_sr
+
+    # See diagram: py4.us/cclasses/class04#r1
+    prices2_df['days'] = days_i_sr
     # I should fit a linear model:
     linr_model     = skl.LinearRegression()
-    x_wrongshape_a = np.array(train_df.days)
+    x_wrongshape_a = np.array(prices2_df.days)
+
+    # See diagram: py4.us/cclasses/class04#r1
     x_a = np.reshape(x_wrongshape_a, (len(x_wrongshape_a),1))
-    y_a = np.array(train_df.Close)
+    y_a = np.array(prices2_df.Close)
+
+    # See diagram: py4.us/cclasses/class04#r1
     linr_model.fit(x_a,y_a)
     # I should convert date2predict to integer of days past min_date_dt
     date2predict_dt = dt.datetime.strptime(date2predict, '%Y-%m-%d')
     date2predict_i  = (date2predict_dt - min_date_dt).days
+
+    # See diagram: py4.us/cclasses/class04#r1
     prediction_f    = linr_model.predict(date2predict_i)[0]
     return {k1_s:tkr
             ,k2_s:date2predict
