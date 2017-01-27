@@ -67,9 +67,18 @@ class Demo15(fr.Resource):
     # I should create a Linear Regression model
     linr_model = skl.LinearRegression()
     # I should use model to "fit" straight line to x_train and y_train
-    x_train_a = np.reshape(np.array(x_train),(len(x_train),1))
+    x_train_a = np.array(x_train).reshape(-1, 1)
     y_train_a = np.array(y_train)
     linr_model.fit(x_train_a,y_train_a)
+
+    # I should collect predictions for yr2predict
+    xtest_a = np.array(test_yr_df.pctlag1).reshape(-1, 1)
+    predictions_a = linr_model.predict(xtest_a)
+    # See diagram: py4.us/cclasses/class04#r2
+    predictions_l = predictions_a.tolist()
+    # I should copy test_yr_df to predictions_df
+    predictions_df = test_yr_df.copy()
+    predictions_df['prediction'] = predictions_l
     
     return {k1_s:tkr
             ,k2_s:yr2predict
