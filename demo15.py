@@ -60,6 +60,16 @@ class Demo15(fr.Resource):
     train_start_sr = (feat_df.Date > train_start_s)
     train_df       = feat_df.copy()[ train_start_sr & train_end_sr ]
     
+    # I should declare x_train to be train_df.pctlag1
+    x_train = train_df.pctlag1
+    # I should declare y_train to be train_df.pctlead
+    y_train = train_df.pctlead
+    # I should create a Linear Regression model
+    linr_model = skl.LinearRegression()
+    # I should use model to "fit" straight line to x_train and y_train
+    x_train_a = np.reshape(np.array(x_train),(len(x_train),1))
+    y_train_a = np.array(y_train)
+    linr_model.fit(x_train_a,y_train_a)
     
     return {k1_s:tkr
             ,k2_s:yr2predict
