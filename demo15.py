@@ -31,6 +31,21 @@ class Demo15(fr.Resource):
     k3_s   = '3. By learning from this many years'
     k4_s   = '4. With '
     algo_s = 'Linear Regression'
+
+    # I should get prices for tkr:
+    prices0_df = pd.read_csv('http://ichart.finance.yahoo.com/table.csv?s='+tkr)
+
+    # See diagram: py4.us/cclasses/class04#r2
+    prices1_df = prices0_df[['Date','Close']].sort_values(['Date'])
+    prices1_df.columns = ['Date','Price']
+    
+    # Create feat_df from prices1_df, pctlead, pctlag1    
+    # See diagram: py4.us/cclasses/class04#r2
+    feat_df = prices1_df.copy()
+    pdb.set_trace()
+    feat_df['pctlead'] = (100.0 * (feat_df.Price.shift(-1) - feat_df.Price) / feat_df.Price).fillna(0)
+    feat_df['pctlag1'] = feat_df.pctlead.shift(1).fillna(0)
+
     return {k1_s:tkr
             ,k2_s:yr2predict
             ,k3_s:yrs2train
