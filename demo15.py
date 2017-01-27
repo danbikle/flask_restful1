@@ -51,6 +51,16 @@ class Demo15(fr.Resource):
     test_end_sr   = (feat_df.Date < str(int(yr2predict)+1))
     test_yr_df    = feat_df.copy()[(test_start_sr & test_end_sr)]
 
+    # I should copy train_i-years of observations before test_yr from feat_df into train_df
+    # See diagram: py4.us/cclasses/class04#r2
+    train_i        = yrs2train
+    train_end_sr   = (feat_df.Date < yr2predict)
+    train_start_i  = int(yr2predict) - train_i
+    train_start_s  = str(train_start_i)
+    train_start_sr = (feat_df.Date > train_start_s)
+    train_df       = feat_df.copy()[ train_start_sr & train_end_sr ]
+    
+    
     return {k1_s:tkr
             ,k2_s:yr2predict
             ,k3_s:yrs2train
