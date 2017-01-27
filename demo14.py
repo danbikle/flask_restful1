@@ -10,7 +10,7 @@
 # Demo:
 # export FLASK_DEBUG=1
 # ~/anaconda3/bin/python demo14.py
-# curl localhost:5000/demo14/IBM/9/2017-12-31
+# curl localhost:5000/demo14/^GSPC/9/2017-12-31
 import pdb
 import os
 import flask         as fl
@@ -83,7 +83,7 @@ class Demo14(fr.Resource):
     }
 # I should declare URL-path-tokens, and I should constrain them:
 api.add_resource(Demo14, '/demo14/<tkr>/<int:yrs2train>/<date2predict>')
-# curl localhost:5000/demo14/IBM/9/2017-12-31
+# curl localhost:5000/demo14/^GSPC/9/2017-12-31
 
 if __name__ == "__main__":
   port = int(os.environ.get("PORT", 5000))
