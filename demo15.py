@@ -42,9 +42,14 @@ class Demo15(fr.Resource):
     # Create feat_df from prices1_df, pctlead, pctlag1    
     # See diagram: py4.us/cclasses/class04#r2
     feat_df = prices1_df.copy()
-    pdb.set_trace()
     feat_df['pctlead'] = (100.0 * (feat_df.Price.shift(-1) - feat_df.Price) / feat_df.Price).fillna(0)
     feat_df['pctlag1'] = feat_df.pctlead.shift(1).fillna(0)
+
+    # I should copy test_yr-observations (about 252) from feat_df into test_yr_df.
+    # See diagram: py4.us/cclasses/class04#r2
+    test_start_sr = (feat_df.Date > yr2predict)
+    test_end_sr   = (feat_df.Date < str(int(yr2predict)+1))
+    test_yr_df    = feat_df.copy()[(test_start_sr & test_end_sr)]
 
     return {k1_s:tkr
             ,k2_s:yr2predict
