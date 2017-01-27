@@ -79,15 +79,30 @@ class Demo15(fr.Resource):
     # I should copy test_yr_df to predictions_df
     predictions_df = test_yr_df.copy()
     predictions_df['prediction'] = predictions_l
-    
+    predictions_df['eff'] = np.sign(predictions_df.prediction) * predictions_df.pctlead
+    predictions_df['acc'] = (predictions_df.eff > 0).astype(int)
+
+    # I should report Accuracy:
+    len_i         = len(predictions_df)
+    accuracy_f    = 100 *  predictions_df.acc.sum()/len_i
+    lo_accuracy_f = 100 * (predictions_df.pctlead>0).astype(int).sum()/len_i
+    # I should report Effectiveness:
+    effectiveness_f    = predictions_df.eff.sum()
+    lo_effectiveness_f = predictions_df.pctlead.sum()
+
+    # I should talk to the End-User:
     return {k1_s:tkr
             ,k2_s:yr2predict
             ,k3_s:yrs2train
             ,k4_s:algo_s
+            ,'5. Accuracy':                accuracy_f
+            ,'6. Long Only Accuracy':      lo_accuracy_f
+            ,'7. Effectiveness':           effectiveness_f
+            ,'8. Long Only Effectiveness': lo_effectiveness_f
     }
 # I should declare URL-path-tokens, and I should constrain them:
 api.add_resource(Demo15, '/demo15/<tkr>/<yr2predict>/<int:yrs2train>')
-# curl localhost:5000/demo15/SPY/2017/1
+# curl localhost:5000/demo15/SPY/2016/25
 
 if __name__ == "__main__":
   port = int(os.environ.get("PORT", 5000))
